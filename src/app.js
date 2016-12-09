@@ -1,64 +1,64 @@
 import {createStore} from 'redux';
 import React,{Component} from 'react';
 import ReactDom from 'react-dom';
+import rootReducer from './reducers'
 
 
-let gid = 0;
 
-const todos = (state = [], action) => {
-  switch(action.type) {
-    case 'ADD_TODO':
-      return [...state, {
-        id: ++gid,
-        text: action.text,
-        completed: false
-      }]
-     case 'TOGGLE_TODO':
-      return state.map((todo) => {
-        if(todo.id == action.id){
-          return Object.assign({},todo,{
-            completed : !todo.completed
-          })
-        }
-        return todo;
-      })
-    default :
-      return state;
+let store = createStore(rootReducer);
+
+console.log(store.getState());
+
+
+class App extends Component {
+  render(){
+    const state = store.getState();
+    const todos = state.todos;
+    return (
+      <div>
+        <input type="text" ref="_input"/>
+        <button
+          onClick={() => {
+            store.dispatch({
+              type: 'ADD_TODO',
+              text: this.refs._input.value
+            })
+          }}>
+          Add
+        </button>
+        <ul>
+          {todos.map((todo) => {
+            return(
+              <li
+                style={{
+                  textDecoration: todo.completed ? 'line-through' :'none'
+                }}
+                onClick={()=> {
+                  store.dispatch({
+                    type: 'TOGGLE_TODO',
+                    id: todo.id
+                  })
+                }}
+                key = {todo.id}>
+                {todo.text}
+              </li>
+            )
+          })}
+        </ul>
+        <span>Show all</span>{' '}
+        <a href="#">Show completed</a>{' '}
+        <a href="#">Show active</a>{' '}
+      </div>
+    )
   }
 }
 
-let store = createStore(todos);
+const render = () => {
+  ReactDom.render(
+    <App />,
+    document.getElementById("root")
+  )
+}
 
-console.log("current:", store.getState());
-
-console.log('dispatch ADD_TODO');
-store.dispatch({
-  type: 'ADD_TODO',
-  text: 'lijia'
-})
-
-console.log("current:", store.getState());
-
-
-console.log('dispatch TOGGLE_TODO');
-store.dispatch({
-  type: 'TOGGLE_TODO',
-  id: 1
-})
-
-console.log("current:", store.getState());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.log(1);
+render();
+store.subscribe(render);
