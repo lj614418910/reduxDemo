@@ -1,4 +1,6 @@
-// import {createStore} from 'redux';
+import {createStore} from 'redux';
+import React,{Component} from 'react';
+import ReactDom from 'react-dom';
 
 const counter = (state = 0, action) => {
     switch(action.type) {
@@ -11,54 +13,38 @@ const counter = (state = 0, action) => {
     }
 }
 
-const createStore = (reducer) => {
-    let state;
-    let list = [];
-    const getState = () => {
-        return state;
-    }
-    const dispatch = (action) =>{
-        state = reducer(state, action);
-        list.forEach((fn) => {
-            fn();
-        })
-    }
-    const subscribe = (fn) => {
-        list.push(fn);
-        return () => {
-            list = list.filter(cd => cd != fn)
-        }
-    }
-    return {
-        getState,
-        subscribe,
-        dispatch
-    }
-}
+
 
 const store = createStore(counter);
-store.dispatch({
-    type:'INIT',
-})
 
-
-
-const render = () => {
-    document.getElementsByTagName('body')[0].innerHTML = `<h1> ${store.getState()} </h1>`;
+class Counter extends Component{
+  render() {
+    console.log(111)
+    return (
+      <div>
+        <h1>{store.getState()}</h1>
+        <button onClick={() => {
+            store.dispatch({
+              type: 'DECREASE'
+            })
+        }}>-</button>
+        <button onClick={() => {
+            store.dispatch({
+              type: 'INCREASE'
+            })
+        }}>+</button>
+      </div>
+    )
+  }
 }
 
-store.subscribe(render);
-
-const unsubsribe = store.subscribe(render);
+const render = () => {
+  ReactDom.render(
+    <Counter></Counter>,
+    document.getElementById('root')
+  )
+}
 
 render();
 
-
-document.addEventListener('click', () => {
-    console.log(1);
-    store.dispatch({
-        type:'INCREASE',
-    })
-    unsubsribe();
-})
-
+store.subscribe(render);
