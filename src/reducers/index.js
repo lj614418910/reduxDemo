@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import todos from './todos.js';
-import visiableFilter from './visiableFilter.js';
+import visibilityFilter from './visibilityFilter.js';
 
 // const combineReducers = (reducers) => {
 //   return (state = {}, action) => {
@@ -21,5 +21,5 @@ import visiableFilter from './visiableFilter.js';
 
 export default combineReducers({
   todos,
-  visiableFilter
+  visibilityFilter
 })

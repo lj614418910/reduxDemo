@@ -1,19 +1,45 @@
 import {createStore} from 'redux';
 import React,{Component} from 'react';
 import ReactDom from 'react-dom';
-import rootReducer from './reducers'
+import rootReducer from './reducers';
+import FilterLink from './Components/FilterLink'
 
 
 
 let store = createStore(rootReducer);
 
-console.log(store.getState());
-
+const getVisibleTodos = (todos, visibilityFilter) => {
+  switch(visibilityFilter){
+    case 'SHOW_ALL':
+      return todos;
+    case 'SHOW_COMPLETED':
+      return todos.filter((todo) => {
+        return todo.completed;
+      })
+    case 'SHOW_ACTIVE':
+      return todos.filter((todo) => {
+        return !todo.completed;
+      })
+    default:
+      throw new Error('unknow filter');
+  }
+}
 
 class App extends Component {
   render(){
     const state = store.getState();
-    const todos = state.todos;
+    // const todos = state.todos;
+    // const visibilityFilter =  state.visibilityFilter;
+    let {todos, visibilityFilter} = state;
+    console.log(state);
+    todos = getVisibleTodos(todos, visibilityFilter);
+    const clickFilter = (filter) => {
+      store.dispatch({
+        type: 'SET_VISIABLEFILTER',
+        filter,
+      })
+    }
+
     return (
       <div>
         <input type="text" ref="_input"/>
@@ -45,9 +71,26 @@ class App extends Component {
             )
           })}
         </ul>
-        <span>Show all</span>{' '}
-        <a href="#">Show completed</a>{' '}
-        <a href="#">Show active</a>{' '}
+        <div>
+          <FilterLink
+            filter="SHOW_ALL"
+            currentFilter={visibilityFilter}
+            onClick = {clickFilter}>
+            Show all
+          </FilterLink>{' '}
+          <FilterLink
+            filter="SHOW_COMPLETED"
+            currentFilter={visibilityFilter}
+            onClick = {clickFilter}>
+            Show completed
+          </FilterLink>{' '}
+          <FilterLink
+            filter="SHOW_ACTIVE"
+            currentFilter={visibilityFilter}
+            onClick = {clickFilter}>
+            Show active
+          </FilterLink>
+        </div>
       </div>
     )
   }

@@ -1,4 +1,7 @@
-const visiableFilter = (state = "SHOW_ALL", action) => {
+
+
+
+const visibilityFilter = (state = "SHOW_ALL", action) => {
   switch (action.type) {
     case  "SET_VISIABLEFILTER":
       return action.filter;
@@ -7,4 +10,4 @@ const visiableFilter = (state = "SHOW_ALL", action) => {
   }
 }
 
-export default visiableFilter;
+export default visibilityFilter;
