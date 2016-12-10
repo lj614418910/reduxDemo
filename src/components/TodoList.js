@@ -62,6 +62,7 @@ class TodoList extends Component {
 //         const props = Object.assign({}, stateProps, dispatchProps);
 //
 //         // return <WrapperComponent {...props} />;
+//         // return <WrapperComponent todos={props.todos} onClickTodo={props.onClickTodo} />;
 //         return React.createElement(WrapperComponent, props);
 //       }
 //     }
