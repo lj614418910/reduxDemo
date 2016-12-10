@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import{connect} from 'react-redux';
 
 const getVisibleTodos = (todos, visibilityFilter) => {
   switch(visibilityFilter){
@@ -19,29 +20,10 @@ const getVisibleTodos = (todos, visibilityFilter) => {
 
 
 class TodoList extends Component {
-  componentDidMount() {
-    const store = this.context.store;
-    this.unsubscribe = store.subscribe(() => {
-      this.forceUpdate();
-    })
-  }
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
   render() {
-    const store = this.context.store;
-    const state = store.getState();
-    let {todos, visibilityFilter} = state;
-    todos = getVisibleTodos(todos, visibilityFilter);
-    const onClickTodo = (id) => {
-      store.dispatch({
-        type: 'TOGGLE_TODO',
-        id
-      })
-    }
     return(
       <ul>
-        {todos.map((todo) => {
+        {this.props.todos.map((todo) => {
           return(
             <li
               style={{
@@ -49,7 +31,7 @@ class TodoList extends Component {
               }}
               key = {todo.id}
               onClick={()=> {
-                onClickTodo(todo.id)
+                this.props.onClickTodo(todo.id)
               }}>
               {todo.text}
             </li>
@@ -59,8 +41,51 @@ class TodoList extends Component {
     )
   }
 }
-TodoList.contextTypes = {
-  store: React.PropTypes.object
+
+
+// const connect = (mapStateToProps, mapDispatchToProps) => {
+//   return (WrapperComponent) => {
+//     class Connect extends Component {
+//       componentDidMount() {
+//         const store = this.context.store;
+//         this.unsubscribe = store.subscribe(() => {
+//           this.forceUpdate();
+//         })
+//       }
+//       componentWillUnmount() {
+//         this.unsubscribe();
+//       }
+//       render (){
+//         const store = this.context.store;
+//         const stateProps = mapStateToProps(store.getState());
+//         const dispatchProps = mapDispatchToProps(store.dispatch);
+//         const props = Object.assign({}, stateProps, dispatchProps);
+//
+//         // return <WrapperComponent {...props} />;
+//         return React.createElement(WrapperComponent, props);
+//       }
+//     }
+//     Connect.contextTypes = {
+//       store: React.PropTypes.object
+//     };
+//     return Connect;
+//   }
+// }
+
+const mapStateToProps = (state) => {
+  return {
+    todos : getVisibleTodos(state.todos, state.visibilityFilter)
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    onClickTodo : (id) => {
+      dispatch({
+        type: 'TOGGLE_TODO',
+        id
+      })
+    }
+  }
 }
 
-export default TodoList;
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

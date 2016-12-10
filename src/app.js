@@ -1,6 +1,7 @@
 import {createStore} from 'redux';
 import React,{Component} from 'react';
 import ReactDom from 'react-dom';
+import {Provider} from 'react-redux'
 import rootReducer from './reducers';
 import AddTodo from './components/AddTodo';
 import TodoList from './components/TodoList';
@@ -25,17 +26,17 @@ class App extends Component {
     )
   }
 }
-class Provider extends Component{
-  getChildContext() {
-    return {store: this.props.store};
-  }
-  render(){
-      return(
-        this.props.children
-      )
-  }
-}
-
+// class Provider extends Component{
+//   getChildContext() {
+//     return {store: this.props.store};
+//   }
+//   render(){
+//       return(
+//         this.props.children
+//       )
+//   }
+// }
+//
 Provider.childContextTypes = {
   store : React.PropTypes.object
 };
