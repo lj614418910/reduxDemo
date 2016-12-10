@@ -3,9 +3,9 @@ import React,{Component} from 'react';
 import ReactDom from 'react-dom';
 import {Provider} from 'react-redux'
 import rootReducer from './reducers';
-import AddTodo from './components/AddTodo';
-import TodoList from './components/TodoList';
-import Footer from './components/Footer';
+import AddTodo from './containers/AddTodo';
+import TodoList from './containers/TodoList';
+import Footer from './containers/Footer';
 
 
 
@@ -26,6 +26,9 @@ class App extends Component {
     )
   }
 }
+
+
+
 // class Provider extends Component{
 //   getChildContext() {
 //     return {store: this.props.store};
@@ -37,9 +40,9 @@ class App extends Component {
 //   }
 // }
 //
-Provider.childContextTypes = {
-  store : React.PropTypes.object
-};
+// Provider.childContextTypes = {
+//   store : React.PropTypes.object
+// };
 
 
 const render = () => {

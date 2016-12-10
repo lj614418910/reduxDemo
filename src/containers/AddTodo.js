@@ -1,15 +1,8 @@
 import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {addTodo} from '../actionJs/'
 
 class AddTodo extends Component{
-  componentDidMount() {
-    const store = this.context.store;
-    this.unsubscribe = store.subscribe(() => {
-      this.forceUpdate();
-    })
-  }
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
   render(){
     const store = this.context.store;
     const onClick = (val) => {
@@ -23,7 +16,7 @@ class AddTodo extends Component{
         <input type="text" ref="_input"/>
         <button
           onClick = {() =>{
-            onClick(this.refs._input.value);
+            this.props.onClick(this.refs._input.value);
           }}>
           Add
         </button>
@@ -32,9 +25,12 @@ class AddTodo extends Component{
   }
 }
 
-AddTodo.contextTypes = {
-  store: React.PropTypes.object
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onClick: (val) => {
+      dispatch(addTodo(val))
+    }
+  }
 }
 
-
-export default AddTodo;
+export default connect(null,mapDispatchToProps)(AddTodo);

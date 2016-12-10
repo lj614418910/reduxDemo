@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import{connect} from 'react-redux';
+import {toggleTodo} from '../actionJs/';
 
 const getVisibleTodos = (todos, visibilityFilter) => {
   switch(visibilityFilter){
@@ -80,10 +81,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return{
     onClickTodo : (id) => {
-      dispatch({
-        type: 'TOGGLE_TODO',
-        id
-      })
+      dispatch(toggleTodo(id))
     }
   }
 }
