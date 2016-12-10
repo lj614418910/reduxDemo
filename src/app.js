@@ -2,7 +2,9 @@ import {createStore} from 'redux';
 import React,{Component} from 'react';
 import ReactDom from 'react-dom';
 import rootReducer from './reducers';
-import FilterLink from './Components/FilterLink'
+import AddTodo from './components/AddTodo';
+import TodoList from './components/TodoList';
+import Footer from './components/Footer';
 
 
 
@@ -33,64 +35,34 @@ class App extends Component {
     let {todos, visibilityFilter} = state;
     console.log(state);
     todos = getVisibleTodos(todos, visibilityFilter);
-    const clickFilter = (filter) => {
-      store.dispatch({
-        type: 'SET_VISIABLEFILTER',
-        filter,
-      })
-    }
-
     return (
       <div>
-        <input type="text" ref="_input"/>
-        <button
-          onClick={() => {
+        <AddTodo
+          onClick={(val) => {
             store.dispatch({
               type: 'ADD_TODO',
-              text: this.refs._input.value
+              text: val
             })
-          }}>
-          Add
-        </button>
-        <ul>
-          {todos.map((todo) => {
-            return(
-              <li
-                style={{
-                  textDecoration: todo.completed ? 'line-through' :'none'
-                }}
-                onClick={()=> {
-                  store.dispatch({
-                    type: 'TOGGLE_TODO',
-                    id: todo.id
-                  })
-                }}
-                key = {todo.id}>
-                {todo.text}
-              </li>
-            )
-          })}
-        </ul>
-        <div>
-          <FilterLink
-            filter="SHOW_ALL"
-            currentFilter={visibilityFilter}
-            onClick = {clickFilter}>
-            Show all
-          </FilterLink>{' '}
-          <FilterLink
-            filter="SHOW_COMPLETED"
-            currentFilter={visibilityFilter}
-            onClick = {clickFilter}>
-            Show completed
-          </FilterLink>{' '}
-          <FilterLink
-            filter="SHOW_ACTIVE"
-            currentFilter={visibilityFilter}
-            onClick = {clickFilter}>
-            Show active
-          </FilterLink>
-        </div>
+          }}
+        />
+        <TodoList
+          todos={todos}
+          onClickTodo={(id) =>{
+            store.dispatch({
+              type:'TOGGLE_TODO',
+              id,
+            })
+          }}
+        />
+        <Footer
+          currentFilter = {visibilityFilter}
+          onClickFilter = {(filter) => {
+            store.dispatch({
+              type: 'SET_VISIABLEFILTER',
+              filter,
+            })
+          }}
+        />
       </div>
     )
   }
