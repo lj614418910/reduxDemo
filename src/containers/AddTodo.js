@@ -4,13 +4,6 @@ import {addTodo} from '../actionJs/'
 
 class AddTodo extends Component{
   render(){
-    const store = this.context.store;
-    const onClick = (val) => {
-      store.dispatch({
-        type: 'ADD_TODO',
-        text: val
-      })
-    }
     return(
       <div>
         <input type="text" ref="_input"/>

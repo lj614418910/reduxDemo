@@ -18,8 +18,6 @@ const getVisibleTodos = (todos, visibilityFilter) => {
       throw new Error('unknow filter');
   }
 }
-
-
 class TodoList extends Component {
   render() {
     return(
