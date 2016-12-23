@@ -1,21 +1,16 @@
 import React,{Component} from 'react';
+import {Link} from 'react-router';
 
-class FilterLink extends Component {
-  render() {
-    if(this.props.currentFilter == this.props.filter){
-      return(
-        <span>{this.props.children}</span>
-      )
-    }
-    return(
-      <a href="#"
-        onClick={() => {
-          this.props.onClick(this.props.filter);
-        }}>
-        {this.props.children}
-      </a>
-    )
-  }
-}
+const FilterLink = ({children,filter}) => (
+  <Link
+    to={filter == "all" ? '/' : filter}
+    activeStyle={{
+      color: 'black',
+      textDecoration: 'none'
+    }}
+    >
+    {children}
+  </Link>
+)
 
 export default FilterLink;

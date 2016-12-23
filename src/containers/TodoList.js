@@ -1,16 +1,17 @@
 import React,{Component} from 'react';
 import{connect} from 'react-redux';
 import {toggleTodo} from '../actionJs/';
+import {withRouter} from 'react-router'
 
 const getVisibleTodos = (todos, visibilityFilter) => {
   switch(visibilityFilter){
-    case 'SHOW_ALL':
+    case 'all':
       return todos;
-    case 'SHOW_COMPLETED':
+    case 'completed':
       return todos.filter((todo) => {
         return todo.completed;
       })
-    case 'SHOW_ACTIVE':
+    case 'active':
       return todos.filter((todo) => {
         return !todo.completed;
       })
@@ -42,38 +43,10 @@ class TodoList extends Component {
 }
 
 
-// const connect = (mapStateToProps, mapDispatchToProps) => {
-//   return (WrapperComponent) => {
-//     class Connect extends Component {
-//       componentDidMount() {
-//         const store = this.context.store;
-//         this.unsubscribe = store.subscribe(() => {
-//           this.forceUpdate();
-//         })
-//       }
-//       componentWillUnmount() {
-//         this.unsubscribe();
-//       }
-//       render (){
-//         const store = this.context.store;
-//         const stateProps = mapStateToProps(store.getState());
-//         const dispatchProps = mapDispatchToProps(store.dispatch);
-//         const props = Object.assign({}, stateProps, dispatchProps);
-//
-//         // return <WrapperComponent {...props} />;
-//         return React.createElement(WrapperComponent, props);
-//       }
-//     }
-//     Connect.contextTypes = {
-//       store: React.PropTypes.object
-//     };
-//     return Connect;
-//   }
-// }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    todos : getVisibleTodos(state.todos, state.visibilityFilter)
+    todos : getVisibleTodos(state.todos, ownProps.params.filter||'all')
   }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -84,4 +57,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TodoList));
