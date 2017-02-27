@@ -8,17 +8,14 @@ export const addTodo = (val) => {
   }
 }
 
-export const setVisiablefilter = (filter) => {
-  return {
-    type: 'SET_VISIABLEFILTER',
-    filter,
-  }
-}
-
-
 export const toggleTodo = (id) => {
   return {
     type: 'TOGGLE_TODO',
     id
   }
 }
+
+export const receiveTodos = (response, filter) => ({
+  type: 'RECEIVE_TODO',
+  response,
+})

@@ -1,25 +1,17 @@
 import React,{Component} from 'react';
 import{connect} from 'react-redux';
-import {toggleTodo} from '../actionJs/';
-import {withRouter} from 'react-router'
+import {toggleTodo, receiveTodos} from '../actionJs/';
+import {withRouter} from 'react-router';
+import {getVisibleTodos} from '../reducers/';
+import {fetchTodos} from '../api/';
 
-const getVisibleTodos = (todos, visibilityFilter) => {
-  switch(visibilityFilter){
-    case 'all':
-      return todos;
-    case 'completed':
-      return todos.filter((todo) => {
-        return todo.completed;
-      })
-    case 'active':
-      return todos.filter((todo) => {
-        return !todo.completed;
-      })
-    default:
-      throw new Error('unknow filter');
-  }
-}
+
 class TodoList extends Component {
+  completedDidMount() {
+    fetchTodos(this.props.filter).then((response) => {
+      this.props.onReceiveTodos(response, this.props.filter);
+    })
+  }
   render() {
     return(
       <ul>
@@ -45,14 +37,19 @@ class TodoList extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
+  const filter = ownProps.params.filter||'all';
   return {
-    todos : getVisibleTodos(state.todos, ownProps.params.filter||'all')
+    todos : getVisibleTodos(state, filter),
+    filter,
   }
 }
 const mapDispatchToProps = (dispatch) => {
   return{
     onClickTodo : (id) => {
       dispatch(toggleTodo(id))
+    },
+    onReceiveTodos: (response, filter) => {
+      dispatch(receiveTodos(response, filter))
     }
   }
 }
